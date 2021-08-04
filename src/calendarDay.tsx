@@ -24,8 +24,7 @@ export default function CalendaryDay({dayKey, day, stockValues, borderSettings }
         if (stockValues)
             stockValues.forEach((stockValue) => {
                 let element = <div className='stockValue'>
-                    <h4>{stockValue.symbol}</h4>
-                    <p>{stockValue.value}</p>
+                    <span>{stockValue.symbol}: {stockValue.value.toFixed(2)}</span> 
                 </div>;
 
                 stockValueElements.push(element);
