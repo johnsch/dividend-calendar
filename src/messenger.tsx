@@ -1,10 +1,10 @@
-import { StockPosition, DividendRequestData } from './interfaces';
+import { TokenData, DividendRequestData } from './interfaces';
 var CryptoJS = require("crypto-js");
 
-export function getBearerToken(): Promise<string> {
+export function getBearerToken(): Promise<TokenData> {
 	return new Promise((resolve, reject) => {
-		let requestUrl = 'http://localhost:8080/v1/token';
-		// let requestUrl = 'https://ibo-financials.com/v1/token';
+		// let requestUrl = 'http://localhost:8080/v1/token';
+		let requestUrl = 'https://ibo-financials.com/v1/token';
 		// let requestUrl = 'http://localhost:8080/v1/user?user=' + process.env.REACT_APP_USERNAME + '&password=' + process.env.REACT_APP_PASSWORD;
 		// let requestUrl = 'https://ibo-financials.com/v1/user?user=' + process.env.REACT_APP_USERNAME + '&password=' + process.env.REACT_APP_PASSWORD;
 		// let requestUrl = 'http://192.168.1.7:8080/v1/user?user=' + process.env.REACT_APP_USERNAME + '&password=' + process.env.REACT_APP_PASSWORD;
@@ -15,21 +15,22 @@ export function getBearerToken(): Promise<string> {
 		fetch(requestUrl, { 
 			method: 'POST', 
 			headers: { 
-				"Content-Type" : "text/plain"
-			  , "X-Forwarded-Remote-User" : "jgslfs" 
+				'Content-Type' : 'text/plain'
+			  //, "X-Forwarded-Remote-User" : "linda" 
 		    },
-			body: token
+			body: token,
+			redirect: 'follow'
 		})
 			.then(response => response.json())
 			.then(data => { resolve( data ) });
 	});
 }
 
-export async function getDividendPayments(data: any): Promise<DividendRequestData> {
+export async function getDividendPayments(data: TokenData): Promise<DividendRequestData> {
 	return new Promise((resolve, reject) => {
-		let requestUrl = 'http://localhost:8080/v1/dividends/calendar/';
-		//let requestUrl = 'https://ibo-financials.com/v1/dividends/calendar/';
-		//let requestUrl = 'http://192.168.1.7:8080/v1/dividends/calendar/';
+		// let requestUrl = 'http://localhost:8080/v1/dividends/calendar/';
+		let requestUrl = 'https://ibo-financials.com/v1/dividends/calendar/';
+		// let requestUrl = 'http://192.168.1.7:8080/v1/dividends/calendar/';
 		let symbolQuery = data.symbols;
 		let sharesQuery = data.shares;
 
@@ -51,6 +52,16 @@ export async function getDividendPayments(data: any): Promise<DividendRequestDat
 	});
 }
 
-export function encrypt(value: String): any {
+export function encryptOld(value: String): string {
 	return CryptoJS.AES.encrypt(value, process.env.REACT_APP_SECRET).toString();
+}
+
+export function encrypt(value: String): string {
+	var parsedBase64Key = CryptoJS.enc.Base64.parse(process.env.REACT_APP_SECRET);
+	var encryptedData = CryptoJS.AES.encrypt(value, parsedBase64Key, {
+		mode: CryptoJS.mode.ECB,
+		padding: CryptoJS.pad.Pkcs7
+		});
+
+	return encryptedData;
 }
