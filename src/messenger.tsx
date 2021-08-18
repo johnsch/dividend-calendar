@@ -6,20 +6,11 @@ export function getBearerToken(): Promise<TokenData> {
 		let requestUrl = 'https://ibo-financials.com/v1/token';
 		// let requestUrl = 'http://192.168.1.7:7070/v1/token';
 		// let requestUrl = 'http://localhost:7070/v1/token';
-		// let requestUrl = 'http://localhost:8080/v1/user?user=' + process.env.REACT_APP_USERNAME + '&password=' + process.env.REACT_APP_PASSWORD;
-		// let requestUrl = 'https://ibo-financials.com/v1/user?user=' + process.env.REACT_APP_USERNAME + '&password=' + process.env.REACT_APP_PASSWORD;
-		// let requestUrl = 'http://192.168.1.7:8080/v1/user?user=' + process.env.REACT_APP_USERNAME + '&password=' + process.env.REACT_APP_PASSWORD;
 
 		let tokenJson = JSON.stringify({userName : process.env.REACT_APP_USERNAME, password : process.env.REACT_APP_PASSWORD, issueDate : Date.now()});
 		let token = encrypt(tokenJson);
-		
-		let basicAuthPT = process.env.REACT_APP_BASIC_AUTH_USERNAME + ":" + process.env.REACT_APP_BASIC_AUTH_PASSWORD;
-		let basicAuth = btoa(basicAuthPT);
-		//let basicAuth = process.env.REACT_APP_BASIC_AUTH as string;
 
 		let headers = new Headers();
-		headers.append('Authorization', 'Basic ' + basicAuth);
-		headers.append('X-Forwarded-Remote-User', 'jgslfs');
 		headers.append('Content-Type', 'text/plain');
 
 		fetch(requestUrl, { 
@@ -38,18 +29,14 @@ export async function getUserSymbolsShares(data: TokenData): Promise<UserSymbols
 	return new Promise((resolve, reject) => {
 		let requestUrl = 'https://ibo-financials.com/v1/userSymbolsShares';
 		// let requestUrl = 'http://192.168.1.7:7070/v1/userSymbolsShares';
-		
-		let basicAuthPT = process.env.REACT_APP_BASIC_AUTH_USERNAME + ":" + process.env.REACT_APP_BASIC_AUTH_PASSWORD;
-		let basicAuth = btoa(basicAuthPT);
-		//let basicAuth = Buffer.from(basicAuthPT, 'utf8').toString('base64');
+
 		let headers = new Headers();
-		headers.append('Authorization', 'Basic ' + basicAuth);
-		//headers.append('X-Forwarded-Remote-User', 'linda');
 		headers.append('Content-Type', 'application/json');
 
 		fetch(requestUrl, { 
 			method: 'POST', 
-			headers: headers
+			headers: headers,
+			redirect: 'follow'
 		})
 		.then(request => request.json())
 		.then(data => { resolve( data) })
@@ -62,22 +49,18 @@ export async function getDividendPayments(data: TokenData): Promise<DividendRequ
 	return new Promise((resolve, reject) => {
 		let requestUrl = 'https://ibo-financials.com/v1/dividends/calendar/';
 		// let requestUrl = 'http://192.168.1.7:7070/v1/dividends/calendar/';
-		// let requestUrl = 'http://localhost:7070/v1/dividends/calendar/';
-		// let requestUrl = 'http://192.168.1.7:8080/v1/dividends/calendar/';
+		//let requestUrl = 'http://localhost:7070/v1/dividends/calendar/';
+
 		let symbolQuery = data.symbols;
 		let sharesQuery = data.shares;
-
-		// stockPositions.forEach((position) => {
-		// 	symbolQuery += position.symbol + ',';
-		// 	sharesQuery += position.shares + ',';
-		// })
 
 		let bearerToken = data.token;
 
 		requestUrl += symbolQuery + '/' + sharesQuery + '/date?user=' + data.user;
 
 		fetch(requestUrl, { 
-			headers: { Authorization: bearerToken } 
+			headers: { Authorization: bearerToken },
+			redirect: 'follow' 
 		})
 		.then(request => request.json())
 		.then(data => { resolve( data) })
