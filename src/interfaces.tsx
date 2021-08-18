@@ -12,7 +12,13 @@ export type TokenData = {
 	 "token": string,
 	 "ttl": number,
 	 "issuedAt": number,
-	 "expiration": number,
+	 "expiration": number
+}
+
+export type UserSymbolsShares = {
+	 "user": string,
+	 "symbols": string,
+	 "shares": string
 }
 
 export type DividendRequestData = {
