@@ -104,8 +104,8 @@ export default function Main() {
 
     useEffect(() => {
 
-        getBearerToken().then((token) => {
-            getDividendPayments(testStockPositions, token).then((data) => {
+        getBearerToken().then((data) => {
+            getDividendPayments(data).then((data) => {
                 console.log(data);
                 //dispatch({ type: 'setBearerToken', payload: token });
                 let parsedDividendPayments = parseDividendPaymentData(data.dividendCalendarList);

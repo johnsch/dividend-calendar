@@ -5,6 +5,22 @@ export type MainState = {
     dividendPayments: DividendPayment[]
 };
 
+export type TokenData = {
+	 "user": string,
+	 "symbols": string,
+	 "shares": string,
+	 "token": string,
+	 "ttl": number,
+	 "issuedAt": number,
+	 "expiration": number
+}
+
+export type UserSymbolsShares = {
+	 "user": string,
+	 "symbols": string,
+	 "shares": string
+}
+
 export type DividendRequestData = {
     "dividendCalendarList": DividendData[],
     "dividendCalendarAgList": DividendAgData[]
