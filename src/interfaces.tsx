@@ -44,6 +44,7 @@ export type DividendData = {
     "paymentDate": string,
     "paymentYear": number,
     "paymentMonth": number,
+    "paymentDay": number;
     "amountTotal": number
 };
 
