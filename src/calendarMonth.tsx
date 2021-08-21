@@ -19,12 +19,6 @@ type BorderSettings = {
 	borderBottom?: string
 };
 
-/*
-let sampleStockValues: StockValue[] = [
-    { symbol: 't', value: 55 },
-    //{ symbol: 'mo', value: 20 }
-];*/
-
 
 export default function CalendarMonth({ month, dividendPayments }: CalendarMonthProps) {
     let { name, days, startingDay} = month;

@@ -86,7 +86,8 @@ export enum MonthNames {
 export interface MonthData {
     name: string,
     days: number,
-    startingDay: number
+    startingDay: number,
+	monthNumber: number
 }
 
 export const months = {

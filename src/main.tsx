@@ -1,5 +1,7 @@
 import React, { useReducer, useEffect } from 'react';
 import CalendarMonth from './calendarMonth';
+import MonthlyPaymentAggregate from './monthlyPaymentAggregate';
+import Summary from './summary';
 import { MonthNames, months, MonthData, StockPosition, DividendPayment, MainState, DividendData } from './interfaces';
 import { getBearerToken, getDividendPayments } from './messenger';
 import { testStockPositions, testDividendData } from './testing/testData';
@@ -139,7 +141,9 @@ export default function Main() {
                     <div className='cycleMonthButton' onClick={() => dispatch({ type: 'increment' })}>&gt;</div>
                 </div>
                 <CalendarMonth month={monthData} dividendPayments={dividendPaymentsForMonth}/>
+				<MonthlyPaymentAggregate dividendPayments={dividendPaymentsForMonth}/>
             </div>
+			<Summary month={monthData} year={state.selectedYear} dividendPayments={state.dividendPayments}/>
         </div>
     );    
 }
