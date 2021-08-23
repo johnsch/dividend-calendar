@@ -1,0 +1,24 @@
+.summary {
+	width: 652px;
+	margin: 0px auto 50px;
+}
+
+.summary h2 {
+	text-align: center;
+}
+
+.paymentListing{
+	margin-top: 10px;
+}
+
+.paymentListing h4,p {
+	display: inline;
+}
+
+.actual p, .actual span {
+	color: green;
+}
+
+.est p, .est span {
+	color: #cccc00;
+}

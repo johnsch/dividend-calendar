@@ -1,5 +1,6 @@
 import React from 'react';
 import {MonthData, DividendPayment} from './interfaces';
+import './summary.css';
 
 type summaryProps = {
 	month: MonthData,
@@ -24,8 +25,8 @@ export default function Summary({month, year, dividendPayments}: summaryProps){
 			if(dividend.month === month.monthNumber){
 				monthTotal += dividend.amount;
 				
-				let listing = <div className={dividend.type === 'actual' ? 'actualMonthPaymentListing' : 'estimatedMonthPaymentListing'}>
-								<h3>{dividend.symbol}: </h3><p> {dividend.amount.toFixed(2)}</p>
+				let listing = <div className={dividend.type + ' paymentListing' } >
+								<h4>{dividend.symbol}: </h4><p> ${dividend.amount.toFixed(2)}</p>
 							  </div>;
 
 				monthPaymentListings.push(listing);
@@ -38,8 +39,12 @@ export default function Summary({month, year, dividendPayments}: summaryProps){
 			<h2>Monthly Summary for {month.name} {year}</h2>
 			{monthPaymentListings}
 			<h2>Yearly summary for {year}</h2>
-			<h3>Confirmed: </h3><p>{actualPaymentTotal.toFixed(2)}</p>
-			<h3>Estimated: </h3><p>{estimatedPaymentTotal.toFixed(2)}</p>
+			<div className='paymentListing actual'>
+				<h4>Confirmed: </h4><p>${actualPaymentTotal.toFixed(2)}</p>
+			</div>
+			<div className='paymentListing est'>
+				<h4>Estimated: </h4><p>${estimatedPaymentTotal.toFixed(2)}</p>
+			</div>
 		</div>
 	);
 }
