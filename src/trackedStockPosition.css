@@ -1,14 +1,14 @@
 .trackedStockPosition-container{
 	display: flex;
 	flex-wrap: wrap;
-	width: 600px;
+	width: 650px;
 	margin: auto;
-	justify-content: space-around;
+
 }
 
 .trackedStockPosition {
-	flex-basis: 120px;
-	margin-top: 45px;
+	flex-basis: 130px;
+	margin-top: 20px;
 }
 
 .trackedStockPosition div {
@@ -20,6 +20,7 @@
 .trackedStockPosition div:first-child {
 	background-color: #b7bfc4;
 	border-radius: 8px 0px 0px 8px;
+	margin-left: 10px
 }
 
 .trackedStockPosition div:last-child {

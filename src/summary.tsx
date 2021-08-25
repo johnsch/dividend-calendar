@@ -38,7 +38,7 @@ export default function Summary({month, year, dividendPayments}: summaryProps){
 		<div className='summary'>
 			<h2>Monthly Summary for {month.name} {year}</h2>
 			{monthPaymentListings}
-			<h2>Yearly summary for {year}</h2>
+			<h2>Yearly Summary for {year}</h2>
 			<div className='paymentListing actual'>
 				<h4>Confirmed: </h4><p>${actualPaymentTotal.toFixed(2)}</p>
 			</div>
