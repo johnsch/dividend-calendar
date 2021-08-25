@@ -6,6 +6,7 @@ import { MonthNames, months, MonthData, StockPosition, DividendPayment, MainStat
 import { getBearerToken, getDividendPayments } from './messenger';
 import { testStockPositions, testDividendData } from './testing/testData';
 import './main.css';
+import DividendSearch from './dividendSearch';
 
 let currentDate = new Date();
 
@@ -90,6 +91,7 @@ function parseDividendPaymentData(data: DividendData[]): DividendPayment[] {
             year: Number(parsedDate[0]),
             month: Number(parsedDate[1]),
             day: Number(parsedDate[2]),
+            shares: current.shares,
             amount: current.amountTotal,
             type: current.type
         };
@@ -134,6 +136,7 @@ export default function Main() {
 
     return (
         <div>
+            <DividendSearch dividendPayments={state.dividendPayments} />
             <div id='calendar'>
                 <div id='cycleMonthButtonContainer'>
                     <div className='cycleMonthButton' onClick={() => dispatch({ type: 'decrement' })}>&lt;</div>
