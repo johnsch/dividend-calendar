@@ -1,0 +1,29 @@
+.trackedStockPosition-container{
+	display: flex;
+	flex-wrap: wrap;
+	width: 650px;
+	margin: auto;
+
+}
+
+.trackedStockPosition {
+	flex-basis: 130px;
+	margin-top: 20px;
+}
+
+.trackedStockPosition div {
+	width: 45px;
+	padding: 10px 0px 10px 10px;
+	display: inline-block;
+	}
+
+.trackedStockPosition div:first-child {
+	background-color: #b7bfc4;
+	border-radius: 8px 0px 0px 8px;
+	margin-left: 10px
+}
+
+.trackedStockPosition div:last-child {
+	background-color: #d1dae0;
+	border-radius: 0px 8px 8px 0px;
+}

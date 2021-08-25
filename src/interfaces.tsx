@@ -53,6 +53,7 @@ export type DividendPayment = {
     year: number,
     month: number,
     day: number,
+    shares: number,
     amount: number
     type: 'actual' | 'estimate'
 }

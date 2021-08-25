@@ -5,6 +5,8 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { StockValue, months } from './interfaces';
 
+import TrackedStockPosition from './trackedStockPosition';
+
 /*
 let sampleStockValues: StockValue[] = [
     { symbol: 't', value: 55 },
@@ -16,6 +18,7 @@ let sampleStockValues: StockValue[] = [
 ReactDOM.render(
   <React.StrictMode>
         <Main />
+
   </React.StrictMode>,
   document.getElementById('root')
 );
