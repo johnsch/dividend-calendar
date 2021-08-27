@@ -27,6 +27,11 @@ export default function DividendSearch({dividendPayments, /*changeDividendData*/
 
 	return (
 		<div id='dividendSearch'>
+			<form>
+				<label htmlFor='symbol'>Stock Symbol: </label> <input type='text' id='symbol' name='symbol' />
+				<label htmlFor='shares'>Shares: </label> <input type='text' id='shares' name='shares' />
+			</form>
+
 			<div className='trackedStockPosition-container'>
 				{stockPositions}
 			</div>

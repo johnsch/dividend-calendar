@@ -2,43 +2,49 @@ import React, { useReducer, useEffect } from 'react';
 import CalendarMonth from './calendarMonth';
 import MonthlyPaymentAggregate from './monthlyPaymentAggregate';
 import Summary from './summary';
-import { MonthNames, months, MonthData, StockPosition, DividendPayment, MainState, DividendData } from './interfaces';
+import { MonthNames, months, MonthData, StockPosition, DividendPayment, MainState, BearerTokenData, InitialDataPayload} from './interfaces';
 import { getBearerToken, getDividendPayments } from './messenger';
-import { testStockPositions, testDividendData } from './testing/testData';
 import './main.css';
 import DividendSearch from './dividendSearch';
 
 let currentDate = new Date();
 
-const initialState: MainState = {
+const defaultState: MainState = {
     selectedMonth: currentDate.getMonth() + 1,
     selectedYear: currentDate.getFullYear(),
-    bearerToken: '',
+    user: '',
+    bearerTokenData: { token: '', ttl: 0, issuedAt: 0, expiration: 0 },
+    stockPositions: [],
     dividendPayments: []
 };
 
 type ACTIONTYPE =
     | { type: 'increment' }
     | { type: 'decrement' }
-    | { type: 'setBearerToken', payload: string }
-    | { type: 'setDividendPayments', payload: DividendPayment[] };
+    | { type: 'setBearerTokenData', payload: BearerTokenData }
+    | { type: 'setDividendPayments', payload: DividendPayment[] }
+    | { type: 'setInitialData', payload: InitialDataPayload };
 
 
-function reducer(state: typeof initialState, action: ACTIONTYPE) {
+function reducer(state: typeof defaultState, action: ACTIONTYPE): MainState {
     switch(action.type) {
         case 'increment':
             if (state.selectedMonth === 12)
                 return ({
                     selectedYear: state.selectedYear + 1,
                     selectedMonth: 1,
-                    bearerToken: state.bearerToken,
+                    user: state.user,
+                    bearerTokenData: state.bearerTokenData,
+                    stockPositions: state.stockPositions,
                     dividendPayments: state.dividendPayments
                 });
             else
                 return ({
                     selectedYear: state.selectedYear,
                     selectedMonth: state.selectedMonth + 1,
-                    bearerToken: state.bearerToken,
+                    user: state.user,
+                    bearerTokenData: state.bearerTokenData,
+                    stockPositions: state.stockPositions,
                     dividendPayments: state.dividendPayments
                 });
 
@@ -47,73 +53,110 @@ function reducer(state: typeof initialState, action: ACTIONTYPE) {
                 return ({
                     selectedYear: state.selectedYear - 1,
                     selectedMonth: 12,
-                    bearerToken: state.bearerToken,
+                    user: state.user,
+                    bearerTokenData: state.bearerTokenData,
+                    stockPositions: state.stockPositions,
                     dividendPayments: state.dividendPayments
                 });
             else
                 return ({
                     selectedYear: state.selectedYear,
                     selectedMonth: state.selectedMonth - 1,
-                    bearerToken: state.bearerToken,
+                    user: state.user,
+                    bearerTokenData: state.bearerTokenData,
+                    stockPositions: state.stockPositions,
                     dividendPayments: state.dividendPayments
                 });
 
-        case 'setBearerToken':
+        case 'setBearerTokenData':
             return ({
                 selectedYear: state.selectedYear,
                 selectedMonth: state.selectedMonth,
-                bearerToken: action.payload,
+                user: state.user,
+                bearerTokenData: action.payload,
+                stockPositions: state.stockPositions,
                 dividendPayments: state.dividendPayments
             });
 
         case 'setDividendPayments':
-            console.log(action.payload);
             return ({
                 selectedYear: state.selectedYear,
                 selectedMonth: state.selectedMonth,
-                bearerToken: state.bearerToken,
+                user: state.user,
+                bearerTokenData: state.bearerTokenData,
+                stockPositions: state.stockPositions,
                 dividendPayments: action.payload
             });
+
+        case 'setInitialData':
+            return ({
+                selectedYear: state.selectedYear,
+                selectedMonth: state.selectedMonth,
+                user: action.payload.user,
+                bearerTokenData: action.payload.bearerTokenData,
+                stockPositions: action.payload.stockPositions,
+                dividendPayments: action.payload.dividendPayments
+            });
+
         default:
             throw new Error();
     }
 }
 
 
-function parseDividendPaymentData(data: DividendData[]): DividendPayment[] {
-    let newDividendPayments: DividendPayment[] = [];
-    
-    data.forEach((current) => {
-        let parsedDate = current.paymentDate.split('-');
-
-        let dividendPayment: DividendPayment = {
-            symbol: current.symbol,
-            year: Number(parsedDate[0]),
-            month: Number(parsedDate[1]),
-            day: Number(parsedDate[2]),
-            shares: current.shares,
-            amount: current.amountTotal,
-            type: current.type
-        };
-
-        newDividendPayments.push(dividendPayment);
-    });
-
-    return newDividendPayments;
-}
-
-
 export default function Main() {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, defaultState);
 
     useEffect(() => {
 
-        getBearerToken().then((data) => {
-            getDividendPayments(data).then((data) => {
-                console.log(data);
-                //dispatch({ type: 'setBearerToken', payload: token });
-                let parsedDividendPayments = parseDividendPaymentData(data.dividendCalendarList);
-                dispatch({ type: 'setDividendPayments', payload: parsedDividendPayments })
+        getBearerToken().then((bearerTokenResponseData) => {
+
+            let currentUser = bearerTokenResponseData.user;
+
+            let newBearerTokenData: BearerTokenData = {
+                token: bearerTokenResponseData.token,
+                ttl: bearerTokenResponseData.ttl,
+                issuedAt: bearerTokenResponseData.issuedAt,
+                expiration: bearerTokenResponseData.expiration
+            };
+
+            let newStockSymbols = bearerTokenResponseData.symbols.split(',');
+            let newStockShares = bearerTokenResponseData.shares.split(',');
+            let newStockPositionData: StockPosition[] = [];
+
+            newStockSymbols.forEach((newSymbol, index) => {
+                let newStockPosition: StockPosition = { symbol: newSymbol, shares: Number(newStockShares[index]) };
+                newStockPositionData.push(newStockPosition);
+            });
+
+            getDividendPayments(newStockPositionData, newBearerTokenData, currentUser).then((dividendPaymentResponseData) => {
+
+                let newDividendPayments: DividendPayment[] = [];
+
+                dividendPaymentResponseData.dividendCalendarList.forEach((current) => {
+
+                    let dividendPayment: DividendPayment = {
+                        symbol: current.symbol,
+                        year: current.paymentYear,
+                        month: current.paymentMonth,
+                        day: current.paymentDay,
+                        shares: current.shares,
+                        amount: current.amountTotal,
+                        type: current.type
+                    };
+
+                    newDividendPayments.push(dividendPayment);
+                });
+
+                let initialDataPayload: InitialDataPayload = {
+                    user: currentUser,
+                    bearerTokenData: newBearerTokenData,
+                    stockPositions: newStockPositionData,
+                    dividendPayments: newDividendPayments
+                };
+
+                dispatch({ type: 'setInitialData', payload: initialDataPayload });
+
             });
         });
     }, [])
@@ -136,7 +179,6 @@ export default function Main() {
 
     return (
         <div>
-            <DividendSearch dividendPayments={state.dividendPayments} />
             <div id='calendar'>
                 <div id='cycleMonthButtonContainer'>
                     <div className='cycleMonthButton' onClick={() => dispatch({ type: 'decrement' })}>&lt;</div>
@@ -146,6 +188,7 @@ export default function Main() {
                 <CalendarMonth month={monthData} dividendPayments={dividendPaymentsForMonth}/>
 				<MonthlyPaymentAggregate dividendPayments={dividendPaymentsForMonth}/>
             </div>
+            <DividendSearch dividendPayments={state.dividendPayments} />
 			<Summary month={monthData} year={state.selectedYear} dividendPayments={state.dividendPayments}/>
         </div>
     );    

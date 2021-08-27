@@ -1,11 +1,12 @@
-import { StockPosition } from '../interfaces';
+import { DividendRequestData, StockPosition } from '../interfaces';
 
 export const testStockPositions: StockPosition[] = [
     { symbol: 'T', shares: 1179 },{ symbol: 'MO', shares:  754},{ symbol: 'ED', shares: 580 },{ symbol: 'SO', shares:  687},{ symbol: 'ETR', shares:  415},
     { symbol: 'D', shares:  569},{ symbol: 'PPL', shares:  1535},{ symbol: 'DUK', shares:  447},{ symbol: 'KMI', shares: 2065 },{ symbol: 'XOM', shares: 630 }
 ]
 
-export const testDividendData = {
+/*This response data format is outdated
+export const testDividendData: DividendRequestData = {
     "dividendCalendarList": [
         {
             "type": "actual",
@@ -644,4 +645,4 @@ export const testDividendData = {
             "amountTotal": 20335.532499999994
         }
     ]
-};
+};*/

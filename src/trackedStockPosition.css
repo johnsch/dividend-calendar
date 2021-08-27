@@ -1,8 +1,18 @@
+#dividendSearch form {
+	width: 650px;
+	margin: 50px auto 30px;
+}
+
+#dividendSearch input {
+	width: 45px;
+	margin-right: 20px;
+}
+
 .trackedStockPosition-container{
 	display: flex;
 	flex-wrap: wrap;
 	width: 650px;
-	margin: auto;
+	margin: 0px auto 60px;
 
 }
 

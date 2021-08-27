@@ -1,11 +1,28 @@
 export type MainState = {
     selectedYear: number,
     selectedMonth: number,
-    bearerToken: string,
+    user: string,
+    bearerTokenData: BearerTokenData,
+    stockPositions: StockPosition[],
     dividendPayments: DividendPayment[]
 };
 
-export type TokenData = {
+export type InitialDataPayload = {
+    user: string,
+    bearerTokenData: BearerTokenData,
+    stockPositions: StockPosition[],
+    dividendPayments: DividendPayment[]
+};
+
+
+export type BearerTokenData = {
+    token: string,
+    ttl: number,
+    issuedAt: number,
+    expiration: number
+};
+
+export type TokenRequestData = {
 	 "user": string,
 	 "symbols": string,
 	 "shares": string,
@@ -35,7 +52,7 @@ export type DividendAgData = {
 };
 
 export type DividendData = {
-    "type": "actual" | "estimate",
+    "type": "actual" | "est",
     "symbol": string,
     "shares": number,
     "frequency": 'unspecified' | 'monthly' | 'quarterly' | 'semi-annual' | 'annual',
@@ -44,6 +61,7 @@ export type DividendData = {
     "paymentDate": string,
     "paymentYear": number,
     "paymentMonth": number,
+    paymentDay: number,
     "amountTotal": number
 };
 
@@ -54,7 +72,7 @@ export type DividendPayment = {
     day: number,
     shares: number,
     amount: number
-    type: 'actual' | 'estimate'
+    type: 'actual' | 'est'
 }
 
 export type StockPosition = {
@@ -65,7 +83,7 @@ export type StockPosition = {
 export interface StockValue  {
     symbol: string,
     value: number,
-    type: 'actual' | 'estimate'
+    type: 'actual' | 'est'
 };
 
 export enum MonthNames {
