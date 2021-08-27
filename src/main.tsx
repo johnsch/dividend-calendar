@@ -7,6 +7,8 @@ import { getBearerToken, getDividendPayments } from './messenger';
 import { testStockPositions, testDividendData } from './testing/testData';
 import './main.css';
 import DividendSearch from './dividendSearch';
+import { Accordion, AccordionItem, AccordionItemButton, AccordionItemHeading, AccordionItemPanel } from 'react-accessible-accordion';
+import 'react-accessible-accordion/dist/fancy-example.css';
 
 let currentDate = new Date();
 
@@ -136,7 +138,18 @@ export default function Main() {
 
     return (
         <div>
-            <DividendSearch dividendPayments={state.dividendPayments} />
+            <Accordion allowZeroExpanded>
+                <AccordionItem>
+                    <AccordionItemHeading>
+                        <AccordionItemButton>
+                            Dividend Search
+                        </AccordionItemButton>
+                    </AccordionItemHeading>
+                    <AccordionItemPanel>
+                        <DividendSearch dividendPayments={state.dividendPayments} />
+                    </AccordionItemPanel>
+                </AccordionItem>
+            </Accordion>
             <div id='calendar'>
                 <div id='cycleMonthButtonContainer'>
                     <div className='cycleMonthButton' onClick={() => dispatch({ type: 'decrement' })}>&lt;</div>
@@ -146,7 +159,18 @@ export default function Main() {
                 <CalendarMonth month={monthData} dividendPayments={dividendPaymentsForMonth}/>
 				<MonthlyPaymentAggregate dividendPayments={dividendPaymentsForMonth}/>
             </div>
-			<Summary month={monthData} year={state.selectedYear} dividendPayments={state.dividendPayments}/>
+            <Accordion allowZeroExpanded>
+                <AccordionItem>
+                    <AccordionItemHeading>
+                        <AccordionItemButton>
+                            Dividend Summary
+                        </AccordionItemButton>
+                    </AccordionItemHeading>
+                    <AccordionItemPanel>
+			            <Summary month={monthData} year={state.selectedYear} dividendPayments={state.dividendPayments}/>
+                    </AccordionItemPanel>
+                </AccordionItem>
+            </Accordion>
         </div>
     );    
 }
