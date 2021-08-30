@@ -4,10 +4,10 @@ import TrackedStockPosition from './trackedStockPosition';
 
 type dividendSearchProps = {
 	dividendPayments: DividendPayment[];
-	//changeDividendData: (symbol: string, shares: number) => void;
+	addStockPosition: (symbol: string, shares: number) => void;
 }
 
-export default function DividendSearch({dividendPayments, /*changeDividendData*/}: dividendSearchProps){
+export default function DividendSearch({dividendPayments, addStockPosition}: dividendSearchProps){
 
 	const [formSymbol, changeFormSymbol] = useState('');
 	const [formShares, changeFormShares] = useState<number>();
@@ -29,6 +29,12 @@ export default function DividendSearch({dividendPayments, /*changeDividendData*/
 		}
     }
 
+	function handleSubmit(event: React.FormEvent) {
+		event.preventDefault();
+		if (formShares && formSymbol)
+			addStockPosition(formSymbol, formShares);
+    }
+
 	let stockPositions: JSX.Element[] = [];
 	let loadedStocks: string[] = [];
 
@@ -47,7 +53,7 @@ export default function DividendSearch({dividendPayments, /*changeDividendData*/
 
 	return (
 		<div id='dividendSearch'>
-			<form>
+			<form onSubmit={handleSubmit}>
 				<label htmlFor='symbol'>Stock Symbol: </label> <input type='text' id='symbol' name='symbol' value={formSymbol} onChange={handleFormChange} />
 				<label htmlFor='shares'>Shares: </label> <input type='text' id='shares' name='shares' value={formShares} onChange={handleFormChange} />
 				<input type='submit' value='Track ' />

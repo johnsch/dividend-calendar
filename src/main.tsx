@@ -2,7 +2,7 @@ import React, { useReducer, useEffect } from 'react';
 import CalendarMonth from './calendarMonth';
 import MonthlyPaymentAggregate from './monthlyPaymentAggregate';
 import Summary from './summary';
-import { MonthNames, months, MonthData, StockPosition, DividendPayment, MainState, BearerTokenData, InitialDataPayload} from './interfaces';
+import { MonthNames, months, MonthData, StockPosition, DividendPayment, MainState, BearerTokenData, InitialDataPayload, ChangeStockPositionsPayload} from './interfaces';
 import { getBearerToken, getDividendPayments } from './messenger';
 import './main.css';
 import DividendSearch from './dividendSearch';
@@ -23,7 +23,8 @@ type ACTIONTYPE =
     | { type: 'decrement' }
     | { type: 'setBearerTokenData', payload: BearerTokenData }
     | { type: 'setDividendPayments', payload: DividendPayment[] }
-    | { type: 'setInitialData', payload: InitialDataPayload };
+    | { type: 'setInitialData', payload: InitialDataPayload }
+    | { type: 'changeStockPositions', payload: ChangeStockPositionsPayload };
 
 
 function reducer(state: typeof defaultState, action: ACTIONTYPE): MainState {
@@ -98,6 +99,16 @@ function reducer(state: typeof defaultState, action: ACTIONTYPE): MainState {
                 dividendPayments: action.payload.dividendPayments
             });
 
+        case 'changeStockPositions':
+            return ({
+                selectedYear: state.selectedYear,
+                selectedMonth: state.selectedMonth,
+                user: state.user,
+                bearerTokenData: state.bearerTokenData,
+                stockPositions: action.payload.stockPositions,
+                dividendPayments: action.payload.dividendPayments
+            });
+
         default:
             throw new Error();
     }
@@ -161,6 +172,46 @@ export default function Main() {
         });
     }, [])
 
+    function addStockPosition(newSymbol: string, newShares: number) {
+        if (!state.stockPositions.some((position) => position.symbol === newSymbol)) {
+            let newStockPositions: StockPosition[] = [];
+
+            state.stockPositions.forEach((position) => {
+                let newPosition = Object.assign({}, position);
+                newStockPositions.push(newPosition);
+            });
+
+            newStockPositions.push({ symbol: newSymbol, shares: newShares });
+
+            getDividendPayments(newStockPositions, state.bearerTokenData, state.user).then((dividendPaymentResponseData) => {
+                let newDividendPayments: DividendPayment[] = [];
+
+                dividendPaymentResponseData.dividendCalendarList.forEach((current) => {
+
+                    let dividendPayment: DividendPayment = {
+                        symbol: current.symbol,
+                        year: current.paymentYear,
+                        month: current.paymentMonth,
+                        day: current.paymentDay,
+                        shares: current.shares,
+                        amount: current.amountTotal,
+                        type: current.type
+                    };
+
+                    newDividendPayments.push(dividendPayment);
+                });
+
+                let changeStockPositionsPayload: ChangeStockPositionsPayload = {
+                    stockPositions: newStockPositions,
+                    dividendPayments: newDividendPayments
+                };
+
+                dispatch({ type: 'changeStockPositions', payload: changeStockPositionsPayload });
+            })
+        }
+            
+    }
+
     let dateObject = new Date();
     let monthObject = Object.values(months).find(monthObject => monthObject.monthNumber === state.selectedMonth);
     
@@ -188,7 +239,7 @@ export default function Main() {
                 <CalendarMonth month={monthData} dividendPayments={dividendPaymentsForMonth}/>
 				<MonthlyPaymentAggregate dividendPayments={dividendPaymentsForMonth}/>
             </div>
-            <DividendSearch dividendPayments={state.dividendPayments} />
+            <DividendSearch dividendPayments={state.dividendPayments} addStockPosition={addStockPosition}/>
 			<Summary month={monthData} year={state.selectedYear} dividendPayments={state.dividendPayments}/>
         </div>
     );    

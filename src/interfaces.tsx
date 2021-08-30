@@ -14,6 +14,10 @@ export type InitialDataPayload = {
     dividendPayments: DividendPayment[]
 };
 
+export type ChangeStockPositionsPayload = {
+    stockPositions: StockPosition[],
+    dividendPayments: DividendPayment[]
+};
 
 export type BearerTokenData = {
     token: string,
