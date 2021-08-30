@@ -22,8 +22,8 @@ export async function getUserSymbolsShares(data: TokenData): Promise<UserSymbols
 
 export function getBearerToken(): Promise<TokenData> {
 	return new Promise((resolve, reject) => {
-		// let requestUrl = 'https://ibo-financials.com/v1/token';
-		let requestUrl = 'http://192.168.1.7:7070/v1/token';
+		let requestUrl = 'https://ibo-financials.com/v1/token';
+		// let requestUrl = 'http://192.168.1.7:7070/v1/token';
 		// let requestUrl = 'http://localhost:7070/v1/token';
 
 		let tokenJson = JSON.stringify({userName : process.env.REACT_APP_USERNAME, password : process.env.REACT_APP_PASSWORD, issueDate : Date.now()});
@@ -48,8 +48,8 @@ export function getBearerToken(): Promise<TokenData> {
 
 export async function getDividendPayments(data: TokenData): Promise<DividendRequestData> {
 	return new Promise((resolve, reject) => {
-		// let requestUrl = 'https://ibo-financials.com/v1/dividends/calendar/';
-		let requestUrl = 'http://192.168.1.7:7070/v1/dividends/calendar/';
+		let requestUrl = 'https://ibo-financials.com/v1/dividends/calendar/';
+		// let requestUrl = 'http://192.168.1.7:7070/v1/dividends/calendar/';
 		//let requestUrl = 'http://localhost:7070/v1/dividends/calendar/';
 
 		let symbolQuery = data.symbols;
