@@ -85,22 +85,3 @@ export function encrypt(value: String): string {
 	return encryptedData;
 }
 
-// export function getHeaders() : string {
-// 	let loc = document.location.origin;
-
-// 	var req = new XMLHttpRequest();
-// 	req.open('GET', loc, false);
-// 	req.send(null);
-// 	var headers = req.getAllResponseHeaders().toLowerCase();
-	
-// 	var iboHeadersArray = headers.split(/\n|\r|\r\n/g).reduce(function(a, b) {
-// 		if (b.length) {
-// 			var [ key, value ] = b.split(': ');
-// 			a[key] = value;
-// 		}
-// 		return a;
-// 	}, {});
-
-// 	return ib
-// }
-
