@@ -1,6 +1,6 @@
 import React from 'react';
 import './monthlyPaymentAggregate.css';
-import {DividendPayment} from './interfaces';
+import {DividendPayment} from './mainTypes';
 
 type MonthlyPaymentAggregateProps = {
 	dividendPayments: DividendPayment[]

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StockPosition} from './interfaces';
+import {StockPosition} from '../mainTypes';
 import './trackedStockPosition.css';
 
 export default function TrackedStockPosition({symbol, shares}: StockPosition){

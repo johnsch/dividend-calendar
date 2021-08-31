@@ -1,5 +1,6 @@
 import React from 'react';
-import {MonthData, DividendPayment} from './interfaces';
+import { MonthData } from './monthData';
+import { DividendPayment } from './mainTypes';
 import './summary.css';
 
 type summaryProps = {

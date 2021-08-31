@@ -1,6 +1,6 @@
 import React from 'react';
 import './calendarDay.css';
-import { StockValue } from './interfaces';
+import { StockValue } from './calendarTypes';
 
 type CalendarDayProps = {
 	dayKey: number,

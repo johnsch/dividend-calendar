@@ -1,18 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Main from './main';
+import Main from './main/main';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { StockValue, months } from './interfaces';
-
-import TrackedStockPosition from './trackedStockPosition';
-
-/*
-let sampleStockValues: StockValue[] = [
-    { symbol: 't', value: 55 },
-    { symbol: 'mo', value: 20 }
-];
-*/
 
 
 ReactDOM.render(

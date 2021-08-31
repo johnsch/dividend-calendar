@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import {DividendPayment, StockPosition} from './interfaces';
+import {DividendPayment} from '../mainTypes';
 import TrackedStockPosition from './trackedStockPosition';
+import './dividendSearch.css';
 
 type dividendSearchProps = {
 	dividendPayments: DividendPayment[];
