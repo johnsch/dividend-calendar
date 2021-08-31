@@ -1,4 +1,5 @@
-import { UserSymbolsShares, DividendRequestData, TokenRequestData, StockPosition, BearerTokenData } from './interfaces';
+import { UserSymbolsShares, DividendRequestData, TokenRequestData } from './messengerTypes';
+import { StockPosition, BearerTokenData } from '../main/mainTypes';
 var CryptoJS = require("crypto-js");
 
 export function getBearerToken(): Promise<TokenRequestData> {

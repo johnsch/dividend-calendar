@@ -1,5 +1,6 @@
 import React from 'react';
-import { months, StockValue, DividendPayment } from './interfaces';
+import { StockValue } from './calendarTypes';
+import {  DividendPayment } from '../mainTypes';
 import CalendarDay from './calendarDay';
 import './calendarMonth.css';
 
@@ -78,7 +79,7 @@ export default function CalendarMonth({ month, dividendPayments }: CalendarMonth
 	}
 
     return ( 
-        <div className='calendar'>
+        <div className='calendarMonth'>
             <div id='monthLabel'><h2>{name}</h2></div>
             <div id='dayLabelContainer'>
                 <div className='dayLabel'>SUN</div>

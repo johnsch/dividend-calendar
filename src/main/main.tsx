@@ -1,11 +1,13 @@
 import React, { useReducer, useEffect } from 'react';
-import CalendarMonth from './calendarMonth';
+import CalendarMonth from './calendar/calendarMonth';
 import MonthlyPaymentAggregate from './monthlyPaymentAggregate';
 import Summary from './summary';
-import { MonthNames, months, MonthData, StockPosition, DividendPayment, MainState, BearerTokenData, InitialDataPayload, ChangeStockPositionsPayload} from './interfaces';
-import { getBearerToken, getDividendPayments } from './messenger';
+import { months, MonthData, } from './monthData';
+import { StockPosition, DividendPayment, MainState, BearerTokenData, InitialDataPayload, ChangeStockPositionsPayload } from './mainTypes';
+import { getBearerToken, getDividendPayments } from '../messenger/messenger';
 import './main.css';
-import DividendSearch from './dividendSearch';
+import DividendSearch from './dividend search/dividendSearch';
+import mainReducer from './mainReducer';
 
 let currentDate = new Date();
 
@@ -18,105 +20,9 @@ const defaultState: MainState = {
     dividendPayments: []
 };
 
-type ACTIONTYPE =
-    | { type: 'increment' }
-    | { type: 'decrement' }
-    | { type: 'setBearerTokenData', payload: BearerTokenData }
-    | { type: 'setDividendPayments', payload: DividendPayment[] }
-    | { type: 'setInitialData', payload: InitialDataPayload }
-    | { type: 'changeStockPositions', payload: ChangeStockPositionsPayload };
-
-
-function reducer(state: typeof defaultState, action: ACTIONTYPE): MainState {
-    switch(action.type) {
-        case 'increment':
-            if (state.selectedMonth === 12)
-                return ({
-                    selectedYear: state.selectedYear + 1,
-                    selectedMonth: 1,
-                    user: state.user,
-                    bearerTokenData: state.bearerTokenData,
-                    stockPositions: state.stockPositions,
-                    dividendPayments: state.dividendPayments
-                });
-            else
-                return ({
-                    selectedYear: state.selectedYear,
-                    selectedMonth: state.selectedMonth + 1,
-                    user: state.user,
-                    bearerTokenData: state.bearerTokenData,
-                    stockPositions: state.stockPositions,
-                    dividendPayments: state.dividendPayments
-                });
-
-        case 'decrement':
-            if (state.selectedMonth === 1)
-                return ({
-                    selectedYear: state.selectedYear - 1,
-                    selectedMonth: 12,
-                    user: state.user,
-                    bearerTokenData: state.bearerTokenData,
-                    stockPositions: state.stockPositions,
-                    dividendPayments: state.dividendPayments
-                });
-            else
-                return ({
-                    selectedYear: state.selectedYear,
-                    selectedMonth: state.selectedMonth - 1,
-                    user: state.user,
-                    bearerTokenData: state.bearerTokenData,
-                    stockPositions: state.stockPositions,
-                    dividendPayments: state.dividendPayments
-                });
-
-        case 'setBearerTokenData':
-            return ({
-                selectedYear: state.selectedYear,
-                selectedMonth: state.selectedMonth,
-                user: state.user,
-                bearerTokenData: action.payload,
-                stockPositions: state.stockPositions,
-                dividendPayments: state.dividendPayments
-            });
-
-        case 'setDividendPayments':
-            return ({
-                selectedYear: state.selectedYear,
-                selectedMonth: state.selectedMonth,
-                user: state.user,
-                bearerTokenData: state.bearerTokenData,
-                stockPositions: state.stockPositions,
-                dividendPayments: action.payload
-            });
-
-        case 'setInitialData':
-            return ({
-                selectedYear: state.selectedYear,
-                selectedMonth: state.selectedMonth,
-                user: action.payload.user,
-                bearerTokenData: action.payload.bearerTokenData,
-                stockPositions: action.payload.stockPositions,
-                dividendPayments: action.payload.dividendPayments
-            });
-
-        case 'changeStockPositions':
-            return ({
-                selectedYear: state.selectedYear,
-                selectedMonth: state.selectedMonth,
-                user: state.user,
-                bearerTokenData: state.bearerTokenData,
-                stockPositions: action.payload.stockPositions,
-                dividendPayments: action.payload.dividendPayments
-            });
-
-        default:
-            throw new Error();
-    }
-}
-
 
 export default function Main() {
-    const [state, dispatch] = useReducer(reducer, defaultState);
+    const [state, dispatch] = useReducer(mainReducer, defaultState);
 
     useEffect(() => {
 
