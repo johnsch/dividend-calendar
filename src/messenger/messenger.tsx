@@ -1,7 +1,12 @@
-import { TokenData, UserSymbolsShares, DividendRequestData } from './interfaces';
+import { UserSymbolsShares, DividendRequestData, TokenRequestData } from './messengerTypes';
+import { StockPosition, BearerTokenData } from '../main/mainTypes';
 var CryptoJS = require("crypto-js");
 
+<<<<<<< HEAD:src/messenger.tsx
 export async function getUserSymbolsShares(data: TokenData): Promise<UserSymbolsShares> {
+=======
+export function getBearerToken(): Promise<TokenRequestData> {
+>>>>>>> 679a7e59bcf4d129cbceb4a45e4dcbbe04a3b2fe:src/messenger/messenger.tsx
 	return new Promise((resolve, reject) => {
 		let requestUrl = 'https://ibo-financials.com/v1/userSymbolsShares';
 		// let requestUrl = 'http://192.168.1.7:7070/v1/userSymbolsShares';
@@ -20,7 +25,11 @@ export async function getUserSymbolsShares(data: TokenData): Promise<UserSymbols
 	});
 }
 
+<<<<<<< HEAD:src/messenger.tsx
 export function getBearerToken(): Promise<TokenData> {
+=======
+export async function getUserSymbolsShares(data: TokenRequestData): Promise<UserSymbolsShares> {
+>>>>>>> 679a7e59bcf4d129cbceb4a45e4dcbbe04a3b2fe:src/messenger/messenger.tsx
 	return new Promise((resolve, reject) => {
 		let requestUrl = 'https://ibo-financials.com/v1/token';
 		// let requestUrl = 'http://192.168.1.7:7070/v1/token';
@@ -46,19 +55,33 @@ export function getBearerToken(): Promise<TokenData> {
 }
 
 
-export async function getDividendPayments(data: TokenData): Promise<DividendRequestData> {
+export async function getDividendPayments(stockPositions: StockPosition[], bearerTokenData: BearerTokenData, user: string): Promise<DividendRequestData> {
 	return new Promise((resolve, reject) => {
 		let requestUrl = 'https://ibo-financials.com/v1/dividends/calendar/';
-		// let requestUrl = 'http://192.168.1.7:7070/v1/dividends/calendar/';
+		//let requestUrl = 'http://192.168.1.7:7070/v1/dividends/calendar/';
 		//let requestUrl = 'http://localhost:7070/v1/dividends/calendar/';
 
-		let symbolQuery = data.symbols;
-		let sharesQuery = data.shares;
+		let symbolQuery = '';
+		let sharesQuery = '';
 
+<<<<<<< HEAD:src/messenger.tsx
 		let bearerToken = data.token;
 		let user = data.user;
 
 		requestUrl += symbolQuery + '/' + sharesQuery + '/date';
+=======
+		stockPositions.forEach((position) => {
+			symbolQuery += position.symbol + ',';
+			sharesQuery += position.shares + ',';
+		});
+
+		symbolQuery = symbolQuery.slice(0, symbolQuery.length - 1); //slices off the ',' at the end.
+		sharesQuery = sharesQuery.slice(0, sharesQuery.length - 1);
+
+		let bearerToken = bearerTokenData.token;
+
+		requestUrl += symbolQuery + '/' + sharesQuery + '/date?user=' + user;
+>>>>>>> 679a7e59bcf4d129cbceb4a45e4dcbbe04a3b2fe:src/messenger/messenger.tsx
 
 		fetch(requestUrl, { 
 			headers: { Authorization: bearerToken, 'x-forwarded-remote-user': user },
