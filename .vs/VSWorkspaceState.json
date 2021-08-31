@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src"
+    "\\src",
+    "\\src\\testing"
   ],
-  "SelectedNode": "\\src\\main.tsx",
+  "SelectedNode": "\\src\\trackedStockPosition.css",
   "PreviewInSolutionExplorer": false
 }
