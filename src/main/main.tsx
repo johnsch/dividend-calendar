@@ -1,13 +1,27 @@
 import React, { useReducer, useEffect } from 'react';
-import CalendarMonth from './calendar/calendarMonth';
-import MonthlyPaymentAggregate from './monthlyPaymentAggregate';
-import Summary from './summary';
-import { months, MonthData, } from './monthData';
-import { StockPosition, DividendPayment, MainState, BearerTokenData, InitialDataPayload, ChangeStockPositionsPayload } from './mainTypes';
-import { getBearerToken, getDividendPayments } from '../messenger/messenger';
-import './main.css';
+import {
+    months,
+    MonthData,
+} from './monthData';
+import {
+    MainState,
+    StockPosition,
+    DividendPayment,
+    ChangeStockPositionsPayload
+} from './mainTypes';
+import { DividendPaymentResponseData } from '../messenger/messengerTypes';
+import {getDividendPayments } from '../messenger/messenger';
 import DividendSearch from './dividend search/dividendSearch';
 import mainReducer from './mainReducer';
+import CalendarMonth from './calendar/calendarMonth';
+import MonthlyPaymentAggregate from './individual components/monthlyPaymentAggregate';
+import Summary from './individual components/summary';
+import {
+    cloneStockPositions,
+    getInitialData,
+    parseDividendPaymentResponseDataIntoDividendPayments
+} from './mainHelperFunctions';
+import './main.css';
 
 let currentDate = new Date();
 
@@ -20,102 +34,31 @@ const defaultState: MainState = {
     dividendPayments: []
 };
 
-
 export default function Main() {
     const [state, dispatch] = useReducer(mainReducer, defaultState);
 
     useEffect(() => {
-
-        getBearerToken().then((bearerTokenResponseData) => {
-
-            let currentUser = bearerTokenResponseData.user;
-
-            let newBearerTokenData: BearerTokenData = {
-                token: bearerTokenResponseData.token,
-                ttl: bearerTokenResponseData.ttl,
-                issuedAt: bearerTokenResponseData.issuedAt,
-                expiration: bearerTokenResponseData.expiration
-            };
-
-            let newStockSymbols = bearerTokenResponseData.symbols.split(',');
-            let newStockShares = bearerTokenResponseData.shares.split(',');
-            let newStockPositionData: StockPosition[] = [];
-
-            newStockSymbols.forEach((newSymbol, index) => {
-                let newStockPosition: StockPosition = { symbol: newSymbol, shares: Number(newStockShares[index]) };
-                newStockPositionData.push(newStockPosition);
-            });
-
-            getDividendPayments(newStockPositionData, newBearerTokenData, currentUser).then((dividendPaymentResponseData) => {
-
-                let newDividendPayments: DividendPayment[] = [];
-
-                dividendPaymentResponseData.dividendCalendarList.forEach((current) => {
-
-                    let dividendPayment: DividendPayment = {
-                        symbol: current.symbol,
-                        year: current.paymentYear,
-                        month: current.paymentMonth,
-                        day: current.paymentDay,
-                        shares: current.shares,
-                        amount: current.amountTotal,
-                        type: current.type
-                    };
-
-                    newDividendPayments.push(dividendPayment);
-                });
-
-                let initialDataPayload: InitialDataPayload = {
-                    user: currentUser,
-                    bearerTokenData: newBearerTokenData,
-                    stockPositions: newStockPositionData,
-                    dividendPayments: newDividendPayments
-                };
-
-                dispatch({ type: 'setInitialData', payload: initialDataPayload });
-
-            });
+        getInitialData().then((initialData) => {
+            dispatch({ type: 'setInitialData', payload: initialData });
         });
     }, [])
 
-    function addStockPosition(newSymbol: string, newShares: number) {
+    async function addStockPosition(newSymbol: string, newShares: number) {
         if (!state.stockPositions.some((position) => position.symbol === newSymbol)) {
-            let newStockPositions: StockPosition[] = [];
 
-            state.stockPositions.forEach((position) => {
-                let newPosition = Object.assign({}, position);
-                newStockPositions.push(newPosition);
-            });
-
+            let newStockPositions: StockPosition[] = cloneStockPositions(state.stockPositions);
             newStockPositions.push({ symbol: newSymbol, shares: newShares });
 
-            getDividendPayments(newStockPositions, state.bearerTokenData, state.user).then((dividendPaymentResponseData) => {
-                let newDividendPayments: DividendPayment[] = [];
+            let dividendPaymentResponseData: DividendPaymentResponseData = await getDividendPayments(newStockPositions, state.bearerTokenData, state.user);
+            let newDividendPayments: DividendPayment[] = parseDividendPaymentResponseDataIntoDividendPayments(dividendPaymentResponseData);
 
-                dividendPaymentResponseData.dividendCalendarList.forEach((current) => {
+            let changeStockPositionsPayload: ChangeStockPositionsPayload = {
+                stockPositions: newStockPositions,
+                dividendPayments: newDividendPayments
+            };
 
-                    let dividendPayment: DividendPayment = {
-                        symbol: current.symbol,
-                        year: current.paymentYear,
-                        month: current.paymentMonth,
-                        day: current.paymentDay,
-                        shares: current.shares,
-                        amount: current.amountTotal,
-                        type: current.type
-                    };
-
-                    newDividendPayments.push(dividendPayment);
-                });
-
-                let changeStockPositionsPayload: ChangeStockPositionsPayload = {
-                    stockPositions: newStockPositions,
-                    dividendPayments: newDividendPayments
-                };
-
-                dispatch({ type: 'changeStockPositions', payload: changeStockPositionsPayload });
-            })
-        }
-            
+            dispatch({ type: 'changeStockPositions', payload: changeStockPositionsPayload });
+        }          
     }
 
     let dateObject = new Date();
