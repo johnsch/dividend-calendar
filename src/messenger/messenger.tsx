@@ -1,5 +1,12 @@
-import { UserSymbolsShares, DividendRequestData, TokenRequestData } from './messengerTypes';
-import { StockPosition, BearerTokenData } from '../main/mainTypes';
+import {
+	UserSymbolsShares,
+	DividendPaymentResponseData,
+	TokenRequestData
+} from './messengerTypes';
+import {
+	StockPosition,
+	BearerTokenData
+} from '../main/mainTypes';
 var CryptoJS = require("crypto-js");
 
 export function getBearerToken(): Promise<TokenRequestData> {
@@ -46,7 +53,7 @@ export async function getUserSymbolsShares(data: TokenRequestData): Promise<User
 }
 
 
-export async function getDividendPayments(stockPositions: StockPosition[], bearerTokenData: BearerTokenData, user: string): Promise<DividendRequestData> {
+export async function getDividendPayments(stockPositions: StockPosition[], bearerTokenData: BearerTokenData, user: string): Promise<DividendPaymentResponseData> {
 	return new Promise((resolve, reject) => {
 		let requestUrl = 'https://ibo-financials.com/v1/dividends/calendar/';
 		//let requestUrl = 'http://192.168.1.7:7070/v1/dividends/calendar/';

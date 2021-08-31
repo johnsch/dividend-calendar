@@ -1,6 +1,6 @@
 import React from 'react';
-import { MonthData } from './monthData';
-import { DividendPayment } from './mainTypes';
+import { MonthData } from '../monthData';
+import { DividendPayment } from '../mainTypes';
 import './summary.css';
 
 type summaryProps = {
@@ -39,6 +39,9 @@ export default function Summary({month, year, dividendPayments}: summaryProps){
 		<div className='summary'>
 			<h2>Monthly Summary for {month.name} {year}</h2>
 			{monthPaymentListings}
+			<div className='paymentListing' style={{ borderTop: '1px solid black' }}>
+				<h4>Total: </h4><p> ${monthTotal.toFixed(2)}</p>
+			</div>
 			<h2>Yearly Summary for {year}</h2>
 			<div className='paymentListing actual'>
 				<h4>Confirmed: </h4><p>${actualPaymentTotal.toFixed(2)}</p>

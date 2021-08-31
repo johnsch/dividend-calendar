@@ -24,8 +24,6 @@ type BorderSettings = {
 export default function CalendarMonth({ month, dividendPayments }: CalendarMonthProps) {
     let { name, days, startingDay} = month;
     let dayKey = 1;
-	let emptyDaySlots = startingDay+1;
-	let daysToResetWeek = 6;
 
     let calendarDays: JSX.Element[] = [];
 
@@ -53,7 +51,6 @@ export default function CalendarMonth({ month, dividendPayments }: CalendarMonth
 		return borderSettings;
 	}
 	
-
 
     for (let x = 0; x < startingDay; x++){
         calendarDays.push(<CalendarDay key={dayKey} dayKey={dayKey} borderSettings={setBorders()}/>);
@@ -94,8 +91,5 @@ export default function CalendarMonth({ month, dividendPayments }: CalendarMonth
                 {calendarDays}
             </div>
         </div>
-
-
     );
-
 }

@@ -1,4 +1,4 @@
-export type DividendRequestData = {
+export type DividendPaymentResponseData = {
     dividendCalendarList: DividendData[],
     dividendCalendarAgList: DividendAgData[]
 };
