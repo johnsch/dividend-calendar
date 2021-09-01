@@ -8,9 +8,9 @@
     margin-right: 20px;
 }
 
-    #dividendSearch input[type="submit"] {
-        width: 49px;
-    }
+#dividendSearch input[type="submit"] {
+    width: 49px;
+}
 
 .trackedStockPosition-container {
     display: flex;
