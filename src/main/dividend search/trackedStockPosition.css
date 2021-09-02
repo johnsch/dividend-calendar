@@ -20,7 +20,10 @@
 	border-top-left-radius: 8px;
 }
 
-.trackedStockPositionData div:nth-child(2) {
+.trackedStockPositionData input {
+	height: 15px;
+	padding-top: 6px;
+	border: none;
 	background-color: #d1dae0;
 }
 

@@ -106,3 +106,18 @@ export function removeDividendPayment(originalDividendPayments: DividendPayment[
 
     return newDividendPayments;
 }
+
+export function changeStockPositionShareQuantity(originalStockPositions: StockPosition[], targetSymbol: string, targetShares: number): StockPosition[] {
+    let newStockPositions: StockPosition[] = [];
+
+    originalStockPositions.forEach((position) => {
+        if (position.symbol !== targetSymbol) {
+            let newPosition = Object.assign({}, position);
+            newStockPositions.push(newPosition);
+        }
+    });
+
+    newStockPositions.push({ symbol: targetSymbol, shares: targetShares });
+
+    return newStockPositions;
+}

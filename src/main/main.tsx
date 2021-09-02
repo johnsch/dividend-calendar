@@ -18,6 +18,7 @@ import MonthlyPaymentAggregate from './individual components/monthlyPaymentAggre
 import Summary from './individual components/summary';
 import {
     addStockPosition,
+    changeStockPositionShareQuantity,
     getInitialData,
     parseDividendPaymentResponseDataIntoDividendPayments,
     removeDividendPayment,
@@ -75,6 +76,20 @@ export default function Main() {
         dispatch({ type: 'changeStockPositions', payload: changeStockPositionsPayload });
     }
 
+    async function changeTrackedStockShareQuantity(targetSymbol: string, newShares: number) {
+        let newStockPositions: StockPosition[] = changeStockPositionShareQuantity(state.stockPositions, targetSymbol, newShares);
+
+        let dividendPaymentResponseData: DividendPaymentResponseData = await getDividendPayments(newStockPositions, state.bearerTokenData, state.user);
+        let newDividendPayments: DividendPayment[] = parseDividendPaymentResponseDataIntoDividendPayments(dividendPaymentResponseData);
+
+        let changeStockPositionsPayload: ChangeStockPositionsPayload = {
+            stockPositions: newStockPositions,
+            dividendPayments: newDividendPayments
+        };
+
+        dispatch({ type: 'changeStockPositions', payload: changeStockPositionsPayload });
+    }
+
     let dateObject = new Date();
     let monthObject = Object.values(months).find(monthObject => monthObject.monthNumber === state.selectedMonth);
     
@@ -102,7 +117,7 @@ export default function Main() {
                 <CalendarMonth month={monthData} dividendPayments={dividendPaymentsForMonth}/>
 				<MonthlyPaymentAggregate dividendPayments={dividendPaymentsForMonth}/>
             </div>
-            <DividendSearch dividendPayments={state.dividendPayments} trackNewStockPosition={trackNewStockPosition} stopTrackingStockPosition={stopTrackingStockPosition}/>
+            <DividendSearch dividendPayments={state.dividendPayments} trackNewStockPosition={trackNewStockPosition} changeTrackedStockShareQuantity={changeTrackedStockShareQuantity} stopTrackingStockPosition={stopTrackingStockPosition}/>
 			<Summary month={monthData} year={state.selectedYear} dividendPayments={state.dividendPayments}/>
         </div>
     );    
