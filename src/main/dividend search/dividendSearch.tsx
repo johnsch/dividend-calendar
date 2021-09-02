@@ -5,10 +5,11 @@ import './dividendSearch.css';
 
 type dividendSearchProps = {
 	dividendPayments: DividendPayment[];
-	addStockPosition: (symbol: string, shares: number) => void;
+	trackNewStockPosition: (symbol: string, shares: number) => void;
+	stopTrackingStockPosition: (symbol: string) => void;
 }
 
-export default function DividendSearch({dividendPayments, addStockPosition}: dividendSearchProps){
+export default function DividendSearch({dividendPayments, trackNewStockPosition, stopTrackingStockPosition}: dividendSearchProps){
 
 	const [formSymbol, changeFormSymbol] = useState('');
 	const [formShares, changeFormShares] = useState<number>();
@@ -33,7 +34,7 @@ export default function DividendSearch({dividendPayments, addStockPosition}: div
 	function handleSubmit(event: React.FormEvent) {
 		event.preventDefault();
 		if (formShares && formSymbol)
-			addStockPosition(formSymbol, formShares);
+			trackNewStockPosition(formSymbol, formShares);
     }
 
 	let stockPositions: JSX.Element[] = [];
@@ -44,7 +45,7 @@ export default function DividendSearch({dividendPayments, addStockPosition}: div
 		if (!loadedStocks.some((symbol) => symbol === dividend.symbol)) {
 			loadedStocks.push(dividend.symbol);
 
-			let trackedStockPosition = <TrackedStockPosition symbol={dividend.symbol} shares={dividend.shares} />;
+			let trackedStockPosition = <TrackedStockPosition symbol={dividend.symbol} shares={dividend.shares} stopTrackingStockPosition={stopTrackingStockPosition}/>;
 
 			stockPositions.push(trackedStockPosition);
 		}
