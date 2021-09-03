@@ -20,7 +20,7 @@ export function getBearerToken(): Promise<TokenRequestData> {
 
 		let headers = new Headers();
 		headers.append('Content-Type', 'text/plain');
-		headers.append('x-forwarded-remote-user', 'linda');
+		// headers.append('x-forwarded-remote-user', 'linda');
 
 		fetch(requestUrl, { 
 			method: 'POST', 
@@ -73,7 +73,7 @@ export async function getDividendPayments(stockPositions: StockPosition[], beare
 
 		let bearerToken = bearerTokenData.token;
 
-		requestUrl += symbolQuery + '/' + sharesQuery + '/date'; /*?user=' + user;*/
+		requestUrl += symbolQuery + '/' + sharesQuery + '/date?user=' + user;
 
 		fetch(requestUrl, { 
 			headers: { 
