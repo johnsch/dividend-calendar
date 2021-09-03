@@ -117,7 +117,7 @@ export default function Main() {
                 <CalendarMonth month={monthData} dividendPayments={dividendPaymentsForMonth}/>
 				<MonthlyPaymentAggregate dividendPayments={dividendPaymentsForMonth}/>
             </div>
-            <DividendSearch dividendPayments={state.dividendPayments} trackNewStockPosition={trackNewStockPosition} changeTrackedStockShareQuantity={changeTrackedStockShareQuantity} stopTrackingStockPosition={stopTrackingStockPosition}/>
+            <DividendSearch stockPositions={state.stockPositions} trackNewStockPosition={trackNewStockPosition} changeTrackedStockShareQuantity={changeTrackedStockShareQuantity} stopTrackingStockPosition={stopTrackingStockPosition}/>
 			<Summary month={monthData} year={state.selectedYear} dividendPayments={state.dividendPayments}/>
         </div>
     );    
