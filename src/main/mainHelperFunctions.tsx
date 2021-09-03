@@ -68,13 +68,56 @@ export function parseDividendPaymentResponseDataIntoDividendPayments(responseDat
     return newDividendPayments;
 }
 
-export function cloneStockPositions(originalStockPositions: StockPosition[]): StockPosition[] {
+export function addStockPosition(originalStockPositions: StockPosition[], targetSymbol: string, targetShares: number): StockPosition[] {
     let newStockPositions: StockPosition[] = [];
 
     originalStockPositions.forEach((position) => {
         let newPosition = Object.assign({}, position);
         newStockPositions.push(newPosition);
     });
+
+    newStockPositions.push({ symbol: targetSymbol, shares: targetShares });
+
+    return newStockPositions;
+}
+
+export function removeStockPosition(originalStockPositions: StockPosition[], targetSymbol: string): StockPosition[] {
+    let newStockPositions: StockPosition[] = [];
+
+    originalStockPositions.forEach((position) => {
+        if (position.symbol !== targetSymbol) {
+            let newPosition = Object.assign({}, position);
+            newStockPositions.push(newPosition);
+        }
+    });
+
+    return newStockPositions;
+}
+
+export function removeDividendPayment(originalDividendPayments: DividendPayment[], targetSymbol: string): DividendPayment[] {
+    let newDividendPayments: DividendPayment[] = [];
+
+    originalDividendPayments.forEach((payment) => {
+        if (payment.symbol !== targetSymbol) {
+            let newPayment = Object.assign({}, payment);
+            newDividendPayments.push(newPayment);
+        }
+    });
+
+    return newDividendPayments;
+}
+
+export function changeStockPositionShareQuantity(originalStockPositions: StockPosition[], targetSymbol: string, targetShares: number): StockPosition[] {
+    let newStockPositions: StockPosition[] = [];
+
+    originalStockPositions.forEach((position) => {
+        if (position.symbol !== targetSymbol) {
+            let newPosition = Object.assign({}, position);
+            newStockPositions.push(newPosition);
+        }
+    });
+
+    newStockPositions.push({ symbol: targetSymbol, shares: targetShares });
 
     return newStockPositions;
 }

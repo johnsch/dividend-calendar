@@ -1,21 +1,58 @@
 .trackedStockPosition {
-	flex-basis: 130px;
+	flex-basis: 120px;
 	margin-top: 20px;
+	margin-left: 10px;
+	display: grid;
+	grid-template-columns: 98px 22px;
 }
 
 .trackedStockPosition div {
-	width: 45px;
-	padding: 10px 0px 10px 10px;
 	display: inline-block;
 	}
 
-.trackedStockPosition div:first-child {
+.trackedStockPositionValue {
+	width: 41px;
+	padding: 3px 0px 3px 8px;
+	font-size: 14px;
+}
+.trackedStockPositionData div:first-child {
 	background-color: #b7bfc4;
-	border-radius: 8px 0px 0px 8px;
-	margin-left: 10px
+	border-top-left-radius: 8px;
 }
 
-.trackedStockPosition div:last-child {
+.trackedStockPositionData input {
+	height: 15px;
+	padding-top: 6px;
+	border: none;
 	background-color: #d1dae0;
-	border-radius: 0px 8px 8px 0px;
 }
+
+.trackedStockPositionData div:nth-child(3) {
+	border-bottom-left-radius: 8px;
+	border-right: 2px solid #b4babf;
+}
+
+.trackedStockPositionLabel {
+	text-align: center;
+	width: 48px;
+	font-size: 11px;
+	padding: 5px 0px;
+	background-color: #9da3a8;
+}
+
+.trackedStockPositionDeleteButton {
+	background-color: #c7d0d6;
+	text-align: center;
+	padding-top: 18px;
+	border-radius: 0px 8px 8px 0px;
+	font-size: 10px;
+	border-left: 1px solid #b7c2c9;
+	color: #676d70;
+}
+
+	.trackedStockPositionDeleteButton:hover {
+		background-color: #ced6db;
+		border-left: 1px solid white;
+		cursor: pointer;
+		color: black;
+	}

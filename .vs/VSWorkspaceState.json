@@ -2,8 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\testing"
+    "\\src\\main"
   ],
-  "SelectedNode": "\\src\\trackedStockPosition.css",
+  "SelectedNode": "\\src\\main\\mainHelperFunctions.tsx",
   "PreviewInSolutionExplorer": false
 }
