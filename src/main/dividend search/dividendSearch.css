@@ -3,14 +3,14 @@
     margin: 50px auto 30px;
 }
 
-#dividendSearch input {
+#dividendSearch form input {
     width: 45px;
     margin-right: 20px;
 }
 
-    #dividendSearch input[type="submit"] {
-        width: 49px;
-    }
+#dividendSearch form input[type="submit"] {
+    width: 49px;
+}
 
 .trackedStockPosition-container {
     display: flex;

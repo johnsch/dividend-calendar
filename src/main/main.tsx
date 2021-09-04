@@ -17,9 +17,12 @@ import CalendarMonth from './calendar/calendarMonth';
 import MonthlyPaymentAggregate from './individual components/monthlyPaymentAggregate';
 import Summary from './individual components/summary';
 import {
-    cloneStockPositions,
+    addStockPosition,
+    changeStockPositionShareQuantity,
     getInitialData,
-    parseDividendPaymentResponseDataIntoDividendPayments
+    parseDividendPaymentResponseDataIntoDividendPayments,
+    removeDividendPayment,
+    removeStockPosition
 } from './mainHelperFunctions';
 import './main.css';
 
@@ -43,11 +46,10 @@ export default function Main() {
         });
     }, [])
 
-    async function addStockPosition(newSymbol: string, newShares: number) {
+    async function trackNewStockPosition(newSymbol: string, newShares: number) {
         if (!state.stockPositions.some((position) => position.symbol === newSymbol)) {
 
-            let newStockPositions: StockPosition[] = cloneStockPositions(state.stockPositions);
-            newStockPositions.push({ symbol: newSymbol, shares: newShares });
+            let newStockPositions: StockPosition[] = addStockPosition(state.stockPositions, newSymbol, newShares);
 
             let dividendPaymentResponseData: DividendPaymentResponseData = await getDividendPayments(newStockPositions, state.bearerTokenData, state.user);
             let newDividendPayments: DividendPayment[] = parseDividendPaymentResponseDataIntoDividendPayments(dividendPaymentResponseData);
@@ -59,6 +61,33 @@ export default function Main() {
 
             dispatch({ type: 'changeStockPositions', payload: changeStockPositionsPayload });
         }          
+    }
+
+    function stopTrackingStockPosition(targetSymbol: string) {
+ 
+        let newStockPositions: StockPosition[] = removeStockPosition(state.stockPositions, targetSymbol);
+        let newDividendPayments: DividendPayment[] = removeDividendPayment(state.dividendPayments, targetSymbol);
+
+        let changeStockPositionsPayload: ChangeStockPositionsPayload = {
+            stockPositions: newStockPositions,
+            dividendPayments: newDividendPayments
+        };
+
+        dispatch({ type: 'changeStockPositions', payload: changeStockPositionsPayload });
+    }
+
+    async function changeTrackedStockShareQuantity(targetSymbol: string, newShares: number) {
+        let newStockPositions: StockPosition[] = changeStockPositionShareQuantity(state.stockPositions, targetSymbol, newShares);
+
+        let dividendPaymentResponseData: DividendPaymentResponseData = await getDividendPayments(newStockPositions, state.bearerTokenData, state.user);
+        let newDividendPayments: DividendPayment[] = parseDividendPaymentResponseDataIntoDividendPayments(dividendPaymentResponseData);
+
+        let changeStockPositionsPayload: ChangeStockPositionsPayload = {
+            stockPositions: newStockPositions,
+            dividendPayments: newDividendPayments
+        };
+
+        dispatch({ type: 'changeStockPositions', payload: changeStockPositionsPayload });
     }
 
     let dateObject = new Date();
@@ -88,7 +117,7 @@ export default function Main() {
                 <CalendarMonth month={monthData} dividendPayments={dividendPaymentsForMonth}/>
 				<MonthlyPaymentAggregate dividendPayments={dividendPaymentsForMonth}/>
             </div>
-            <DividendSearch dividendPayments={state.dividendPayments} addStockPosition={addStockPosition}/>
+            <DividendSearch stockPositions={state.stockPositions} trackNewStockPosition={trackNewStockPosition} changeTrackedStockShareQuantity={changeTrackedStockShareQuantity} stopTrackingStockPosition={stopTrackingStockPosition}/>
 			<Summary month={monthData} year={state.selectedYear} dividendPayments={state.dividendPayments}/>
         </div>
     );    
