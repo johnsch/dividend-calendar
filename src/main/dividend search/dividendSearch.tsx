@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
-import {DividendPayment} from '../mainTypes';
+import { StockPosition} from '../mainTypes';
 import TrackedStockPosition from './trackedStockPosition';
 import './dividendSearch.css';
 
 type dividendSearchProps = {
-	dividendPayments: DividendPayment[];
+	stockPositions: StockPosition[];
 	trackNewStockPosition: (symbol: string, shares: number) => void;
 	changeTrackedStockShareQuantity: (targetSymbol: string, newShares: number) => void;
 	stopTrackingStockPosition: (symbol: string) => void;
 }
 
-export default function DividendSearch({dividendPayments, trackNewStockPosition, changeTrackedStockShareQuantity, stopTrackingStockPosition}: dividendSearchProps){
+export default function DividendSearch({stockPositions, trackNewStockPosition, changeTrackedStockShareQuantity, stopTrackingStockPosition}: dividendSearchProps){
 
 	const [formSymbol, changeFormSymbol] = useState('');
 	const [formShares, changeFormShares] = useState<number>();
+
 
 	function handleFormChange(event: React.FormEvent<HTMLInputElement> & { target: HTMLInputElement }) {
 		switch (event.target.name) { 
@@ -38,21 +39,17 @@ export default function DividendSearch({dividendPayments, trackNewStockPosition,
 			trackNewStockPosition(formSymbol, formShares);
     }
 
-	let stockPositions: JSX.Element[] = [];
-	let loadedStocks: string[] = [];
+	let trackedStockPositionComponents: JSX.Element[] = [];
+	
+	
+	stockPositions.forEach((position) => {
+		let newTrackedStockPosition = <TrackedStockPosition key={position.symbol} symbol={position.symbol} shares={position.shares} changeTrackedStockShareQuantity={changeTrackedStockShareQuantity} stopTrackingStockPosition={stopTrackingStockPosition}/>;
+		
 
-	dividendPayments.forEach((dividend) => {
+		trackedStockPositionComponents.push(newTrackedStockPosition);
 
-		if (!loadedStocks.some((symbol) => symbol === dividend.symbol)) {
-			loadedStocks.push(dividend.symbol);
-
-			let trackedStockPosition = <TrackedStockPosition symbol={dividend.symbol} shares={dividend.shares} changeTrackedStockShareQuantity={changeTrackedStockShareQuantity} stopTrackingStockPosition={stopTrackingStockPosition}/>;
-
-			stockPositions.push(trackedStockPosition);
-		}
 	});
-
-	loadedStocks = [];
+	
 
 	return (
 		<div id='dividendSearch'>
@@ -63,7 +60,7 @@ export default function DividendSearch({dividendPayments, trackNewStockPosition,
 			</form>
 
 			<div className='trackedStockPosition-container'>
-				{stockPositions}
+				{trackedStockPositionComponents}
 			</div>
 		</div>
 	);

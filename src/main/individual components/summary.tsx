@@ -26,7 +26,7 @@ export default function Summary({month, year, dividendPayments}: summaryProps){
 			if(dividend.month === month.monthNumber){
 				monthTotal += dividend.amount;
 				
-				let listing = <div className={dividend.type + ' paymentListing' } >
+				let listing = <div className={dividend.type + ' paymentListing'} key={dividend.symbol} >
 								<h4>{dividend.symbol}: </h4><p> ${dividend.amount.toFixed(2)}</p>
 							  </div>;
 

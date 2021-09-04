@@ -118,7 +118,8 @@ export default function Main() {
                 </div>
                 <CalendarMonth month={monthData} dividendPayments={dividendPaymentsForMonth}/>
 				<MonthlyPaymentAggregate dividendPayments={dividendPaymentsForMonth} user={state.user}/>
-            </div><Accordion allowZeroExpanded>
+            </div>
+            <Accordion allowZeroExpanded>
                 <AccordionItem>
                     <AccordionItemHeading>
                         <AccordionItemButton>
@@ -126,7 +127,7 @@ export default function Main() {
                         </AccordionItemButton>
                     </AccordionItemHeading>
                     <AccordionItemPanel>
-                        <DividendSearch dividendPayments={state.dividendPayments} trackNewStockPosition={trackNewStockPosition} changeTrackedStockShareQuantity={changeTrackedStockShareQuantity} stopTrackingStockPosition={stopTrackingStockPosition}/>
+                        <DividendSearch stockPositions={state.stockPositions} trackNewStockPosition={trackNewStockPosition} changeTrackedStockShareQuantity={changeTrackedStockShareQuantity} stopTrackingStockPosition={stopTrackingStockPosition}/>
                     </AccordionItemPanel>
                 </AccordionItem>
                 <AccordionItem>
