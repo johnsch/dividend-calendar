@@ -73,12 +73,12 @@ export async function getDividendPayments(stockPositions: StockPosition[], beare
 
 		let bearerToken = bearerTokenData.token;
 
-		requestUrl += symbolQuery + '/' + sharesQuery + '/date?user=' + user;
+		requestUrl += symbolQuery + '/' + sharesQuery + '/date';
 
 		fetch(requestUrl, { 
 			headers: { 
-				Authorization: bearerToken
-				// ,'x-forwarded-remote-user': user
+				Authorization: bearerToken,
+				'x-forwarded-remote-user': user
 			},
 			redirect: 'follow' 
 		})
