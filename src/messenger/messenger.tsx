@@ -20,6 +20,7 @@ export function getBearerToken(): Promise<TokenRequestData> {
 
 		let headers = new Headers();
 		headers.append('Content-Type', 'text/plain');
+		// headers.append('x-forwarded-remote-user', 'linda');
 
 		fetch(requestUrl, { 
 			method: 'POST', 
@@ -56,8 +57,8 @@ export async function getUserSymbolsShares(data: TokenRequestData): Promise<User
 export async function getDividendPayments(stockPositions: StockPosition[], bearerTokenData: BearerTokenData, user: string): Promise<DividendPaymentResponseData> {
 	return new Promise((resolve, reject) => {
 		let requestUrl = 'https://ibo-financials.com/v1/dividends/calendar/';
-		//let requestUrl = 'http://192.168.1.7:7070/v1/dividends/calendar/';
-		//let requestUrl = 'http://localhost:7070/v1/dividends/calendar/';
+		// let requestUrl = 'http://192.168.1.7:7070/v1/dividends/calendar/';
+		// let requestUrl = 'http://localhost:7070/v1/dividends/calendar/';
 
 		let symbolQuery = '';
 		let sharesQuery = '';
@@ -72,10 +73,13 @@ export async function getDividendPayments(stockPositions: StockPosition[], beare
 
 		let bearerToken = bearerTokenData.token;
 
-		requestUrl += symbolQuery + '/' + sharesQuery + '/date?user=' + user;
+		requestUrl += symbolQuery + '/' + sharesQuery + '/date';
 
 		fetch(requestUrl, { 
-			headers: { Authorization: bearerToken },
+			headers: { 
+				Authorization: bearerToken,
+				'x-forwarded-remote-user': user
+			},
 			redirect: 'follow' 
 		})
 		.then(request => request.json())

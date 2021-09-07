@@ -25,6 +25,8 @@ import {
     removeStockPosition
 } from './mainHelperFunctions';
 import './main.css';
+import { Accordion, AccordionItem, AccordionItemButton, AccordionItemHeading, AccordionItemPanel } from 'react-accessible-accordion';
+import 'react-accessible-accordion/dist/fancy-example.css';
 
 let currentDate = new Date();
 
@@ -115,10 +117,30 @@ export default function Main() {
                     <div className='cycleMonthButton' onClick={() => dispatch({ type: 'increment' })}>&gt;</div>
                 </div>
                 <CalendarMonth month={monthData} dividendPayments={dividendPaymentsForMonth}/>
-				<MonthlyPaymentAggregate dividendPayments={dividendPaymentsForMonth}/>
+				<MonthlyPaymentAggregate dividendPayments={dividendPaymentsForMonth} user={state.user}/>
             </div>
-            <DividendSearch stockPositions={state.stockPositions} trackNewStockPosition={trackNewStockPosition} changeTrackedStockShareQuantity={changeTrackedStockShareQuantity} stopTrackingStockPosition={stopTrackingStockPosition}/>
-			<Summary month={monthData} year={state.selectedYear} dividendPayments={state.dividendPayments}/>
+            <Accordion allowZeroExpanded>
+                <AccordionItem>
+                    <AccordionItemHeading>
+                        <AccordionItemButton>
+                            Dividend Search
+                        </AccordionItemButton>
+                    </AccordionItemHeading>
+                    <AccordionItemPanel>
+                        <DividendSearch stockPositions={state.stockPositions} trackNewStockPosition={trackNewStockPosition} changeTrackedStockShareQuantity={changeTrackedStockShareQuantity} stopTrackingStockPosition={stopTrackingStockPosition}/>
+                    </AccordionItemPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <AccordionItemHeading>
+                        <AccordionItemButton>
+                            Dividend Summary
+                        </AccordionItemButton>
+                    </AccordionItemHeading>
+                    <AccordionItemPanel>
+			            <Summary month={monthData} year={state.selectedYear} dividendPayments={state.dividendPayments}/>
+                    </AccordionItemPanel>
+                </AccordionItem>
+            </Accordion>
         </div>
     );    
 }
