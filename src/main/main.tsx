@@ -123,7 +123,7 @@ export default function Main() {
                 <AccordionItem>
                     <AccordionItemHeading>
                         <AccordionItemButton>
-                            Dividend Search
+                            Track Stock Positions
                         </AccordionItemButton>
                     </AccordionItemHeading>
                     <AccordionItemPanel>
@@ -133,7 +133,7 @@ export default function Main() {
                 <AccordionItem>
                     <AccordionItemHeading>
                         <AccordionItemButton>
-                            Dividend Summary
+                            Summary
                         </AccordionItemButton>
                     </AccordionItemHeading>
                     <AccordionItemPanel>

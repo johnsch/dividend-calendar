@@ -15,6 +15,6 @@
 .trackedStockPosition-container {
     display: flex;
     flex-wrap: wrap;
-    width: 650px;
+    width: 530px;
     margin: 0px auto 60px;
 }

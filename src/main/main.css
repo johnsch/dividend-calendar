@@ -13,3 +13,12 @@
     font-size: 30px;
     cursor: pointer;
 }
+
+.accordion {
+    width: 652px;
+    margin: 0px auto 50px;
+}
+
+.accordion__button {
+    padding-right: 0px;
+}
