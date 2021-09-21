@@ -26,7 +26,7 @@ import {
 } from './mainHelperFunctions';
 import './main.css';
 import { Accordion, AccordionItem, AccordionItemButton, AccordionItemHeading, AccordionItemPanel } from 'react-accessible-accordion';
-import 'react-accessible-accordion/dist/fancy-example.css';
+//import 'react-accessible-accordion/dist/fancy-example.css';
 
 let currentDate = new Date();
 
